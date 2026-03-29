@@ -1,0 +1,73 @@
+#PROJECT REPORT: AI-POWERED GESTURE DRAWING CANVAS
+Course: Cloud Computing And Automation
+
+Student Name: Aryan Sharma
+
+Project Title: AI Gesture-Paint: A Natural User Interface for Digital Art
+
+1. Abstract
+This project presents a touchless, gesture-controlled digital drawing application developed using Python, OpenCV, and MediaPipe. The system allows users to draw, select colors, and erase in a 3D space using only a standard webcam. By translating skeletal hand tracking into real-time canvas coordinates, the project demonstrates a Natural User Interface (NUI) that eliminates the need for physical contact with hardware.
+
+2. Problem Statement
+Traditional digital art requires expensive specialized hardware such as graphic tablets or touchscreens. Furthermore, in many modern environments—such as medical operating rooms, public information kiosks, or sterile laboratories—physical contact with a mouse or screen is either impractical or unhygienic. This project addresses the need for a low-cost, accessible, and contactless digital input system that can distinguish between intentional drawing and accidental hand movement.
+
+3. Tech Stack & Environment
+To ensure stability and real-time performance, the following environment was utilized:
+
+Language: Python 3.12 (Selected for library stability).
+
+OpenCV (Open Source Computer Vision Library): Used for video stream acquisition, image processing, and rendering the GUI elements.
+
+MediaPipe (Google): Employed for high-fidelity, 21-point hand landmark detection and tracking.
+
+NumPy: Used for high-speed matrix manipulation to manage the digital canvas layer.
+
+Colorsys: Used to implement a smooth RGB/HSV color transition logic.
+
+4. Methodology & Approach
+4.1 Hand Landmark Tracking
+The core of the project relies on the MediaPipe Hands solution. The algorithm identifies 21 key landmarks (coordinates) on the hand. I specifically targeted:
+
+Landmark 8 (Index Tip): The primary drawing tool.
+
+Landmark 4 (Thumb Tip): Used for color selection and menu interaction.
+
+Landmark 12 & 16 (Middle & Ring Tips): Used for gesture-based erasing.
+
+Landmark 0 (Wrist): Used for orientation checking.
+
+4.2 Gesture Logic Design
+I implemented a logic-gate system to interpret user intent:
+
+Drawing Mode: Activated when only the Index finger is upright (Tip.y < Knuckle.y).
+
+Selection/Menu Mode: Activated via a "Z-Axis Air Tap" (detecting rapid movement toward the camera) near the RGB icon.
+
+Erasing Mode: Triggered when the system detects more than two fingers extended simultaneously.
+
+Standing Position Guard: To prevent "ghost drawing," the system only draws if the wrist is positioned below the knuckles, ensuring the user is in an intentional "pointing" stance.
+
+4.3 Rendering Engine
+The project uses a dual-layer approach. A black NumPy matrix (the Canvas) is created with the same dimensions as the camera feed (1280x720). Every frame, the drawing logic updates the Canvas. Finally, the Canvas is merged with the live video feed using bitwise operations to create the final interactive display.
+
+5. Key Decisions & Challenges
+5.1 Environment Management
+During development, I encountered significant compatibility issues with Python 3.14. Core libraries like MediaPipe did not yet have stable distributions for that version. I made the strategic decision to utilize Python 3.12, which provided the necessary stability for a production-ready AI application.
+
+5.2 Interaction Design
+A major challenge was the UI cluttering the drawing space. I implemented an Auto-Hide UI logic: the menu is "Sticky" while selecting colors but automatically collapses when the user begins a drawing stroke. This maximizes the creative area for the user.
+
+5.3 Detection Precision
+To handle the "noisy" input from a standard webcam, I tuned the min_detection_confidence to 0.7. This reduced flickering and ensured that the brush followed the finger accurately without jumping across the screen.
+
+6. What I Learned
+Through the completion of this BYOP, I gained deep insights into:
+
+Real-time Image Processing: Managing high-resolution frames while maintaining 30+ FPS.
+
+Vector Mathematics: Using Euclidean distance to trigger interaction events (Pinch/Tap).
+
+User Experience (UX) in AI: Designing gestures that feel natural to a human user rather than just efficient for a computer.
+
+7. Conclusion
+The AI Gesture-Paint project successfully demonstrates that complex human-computer interaction can be achieved using affordable hardware and efficient AI logic. The system is robust, responsive, and solves the identified problem of providing a contactless digital drawing experience. Future iterations could expand this into 3D sculpting or gesture-based slide presentations.
